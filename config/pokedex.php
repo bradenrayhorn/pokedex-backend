@@ -7,4 +7,9 @@ return [
     */
     'strip_description' => env('POKEDEX_STRIP_DESCRIPTION', true),
 
+    /*
+    * Sets the amount of pokemon listed per page.
+    */
+    'paginate_size' => env('POKEDEX_PAGINATE_SIZE', 10),
+
 ];
