@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
+use Validator;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class PokedexController extends Controller {
@@ -89,6 +91,53 @@ class PokedexController extends Controller {
 
         // return properly formatted results
         return response()->json($results, 200);
+    }
+
+    public function capture(Request $request) {
+        // use validator to verify data
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer|exists:pokemon'
+        ]);
+
+        if ($validator->fails()) {
+            // validator failed, return error messages
+            $errors = "";
+            foreach($validator->errors()->all() as $err) {
+                $errors .= $err . " ";
+            }
+            return response()->json([
+                'message' => trim($errors)
+            ], 422);
+        } else {
+            $userId = \Auth::guard('api')->user()->id;
+            $pokeId = $validator->getData()['id'];
+
+            $result = DB::table('pokemon_captured')->where('id', $userId)->where('pokemon_id', $pokeId);
+            if($result->exists()){
+                return response()->json([
+                    'message' => "Pokemon {$pokeId} already captured."
+                ], 422);
+            } else {
+                DB::table('pokemon_captured')->insert([
+                    ['id' => $userId, 'pokemon_id' => $pokeId]
+                ]);
+                return response()->json([
+                    'message' => "Captured pokemon {$pokeId}."
+                ], 400);
+            }
+
+        }
+    }
+
+    /*
+    * Presents a list of pokemon captured by the user.
+    */
+    public function listCaptured() {
+        $userId = \Auth::guard('api')->user()->id;
+
+        return response()->json(
+            DB::table('pokemon_captured')->where('id', $userId)->pluck('pokemon_id')
+        , 400);
     }
 
 }

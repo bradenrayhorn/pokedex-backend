@@ -46,6 +46,12 @@ class CreatePokedexTables extends Migration
             $table->index('id');
             $table->text('egg_group');
         });
+
+        Schema::create('pokemon_captured', function (Blueprint $table) {
+            $table->integer('id');
+            $table->index('id');
+            $table->integer('pokemon_id');
+        });
     }
 
     /**
@@ -59,5 +65,6 @@ class CreatePokedexTables extends Migration
         Schema::dropIfExists('pokemon_types');
         Schema::dropIfExists('pokemon_abilities');
         Schema::dropIfExists('pokemon_egg_groups');
+        Schema::dropIfExists('pokemon_captured');
     }
 }
