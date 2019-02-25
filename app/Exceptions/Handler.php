@@ -46,6 +46,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'message' => 'Invalid HTTP method.'
+            ], 405);
+        }
         return parent::render($request, $exception);
     }
 }
