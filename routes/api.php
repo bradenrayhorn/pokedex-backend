@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('pokemon/{id}', 'PokedexController@details');
+Route::get('pokemon/{id}', 'PokedexController@details')->where('id', '[0-9]+');
 
 Route::get('pokemon', 'PokedexController@paginatedPokemon');
 
@@ -24,7 +24,7 @@ Route::group(['middleware' => 'checkapitoken'], function () {
 
     Route::post('pokemon/capture', 'PokedexController@capture');
 
-    Route::post('pokemon/captured', 'PokedexController@listCaptured');
+    Route::get('pokemon/captured', 'PokedexController@listCaptured');
 });
 
 Route::post('user/register', 'UserController@register');
