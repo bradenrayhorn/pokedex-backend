@@ -46,7 +46,7 @@ class UserController extends Controller
                 return response()->json([
                     'message' => 'Successful registration.',
                     'api_token' => $token
-                ], 400);
+                ], 200);
             } else {
                 // failure
                 return response()->json([
@@ -88,7 +88,7 @@ class UserController extends Controller
                     return response()->json([
                         'message' => 'Found API token.',
                         'api_token' => $u->first()->api_token
-                    ], 400);
+                    ], 200);
                 } else {
                     return response()->json([
                         'message' => 'Invalid password.'
