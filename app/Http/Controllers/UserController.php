@@ -50,21 +50,20 @@ class UserController extends Controller
             } else {
                 // failure
                 return response()->json([
-                    'message' => 'Failed to registrate.',
-                    'api_token' => $token
+                    'message' => 'Failed to registrate.'
                 ], 500);
             }
         }
     }
 
     /*
-    * Gets the user's token when provided with valid credentials.
+    * Gets the user's token and regenerates it when provided with valid credentials.
     */
     public function getToken(Request $request) {
         // use validator to verify data
         $validator = Validator::make($request->all(), [
             'password' => 'required|max:255',
-            'email' => 'required|email|exists:users'
+            'username' => 'required|exists:users|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -79,16 +78,28 @@ class UserController extends Controller
         } else {
             // success
             $data = $validator->getData();
-            $u = User::where('email', $data["email"]);
+            $u = User::where('username', $data["username"]);
 
-            // try to get user with email
+            // try to get user with username
             if($u->exists()) {
-                if(\Hash::check($data["password"], $u->first()->password)) {
-                    // return data
-                    return response()->json([
-                        'message' => 'Found API token.',
-                        'api_token' => $u->first()->api_token
-                    ], 200);
+                $user = $u->first();
+                if(\Hash::check($data["password"], $user->password)) {
+                    // refresh token
+                    $token = bin2hex(random_bytes(16));
+                    $user->api_token = $token;
+                    // attempt to save the updated user
+                    if($user->save()) {
+                        // return data
+                        return response()->json([
+                            'message' => 'Regenerated token.',
+                            'api_token' => $token
+                        ], 200);
+                    } else {
+                        // failure
+                        return response()->json([
+                            'message' => 'Failed to regenerate token.'
+                        ], 500);
+                    }
                 } else {
                     return response()->json([
                         'message' => 'Invalid password.'
@@ -96,7 +107,7 @@ class UserController extends Controller
                 }
             } else {
                 return response()->json([
-                    'message' => 'Invalid email.'
+                    'message' => 'Invalid username.'
                 ], 422);
             }
         }
