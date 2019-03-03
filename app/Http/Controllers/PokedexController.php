@@ -123,7 +123,7 @@ class PokedexController extends Controller {
                 ]);
                 return response()->json([
                     'message' => "Captured pokemon {$pokeId}."
-                ], 400);
+                ], 200);
             }
 
         }
@@ -137,7 +137,7 @@ class PokedexController extends Controller {
 
         return response()->json(
             DB::table('pokemon_captured')->where('id', $userId)->pluck('pokemon_id')
-        , 400);
+        , 200);
     }
 
 }
