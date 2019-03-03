@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -47,11 +47,28 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof MethodNotAllowedHttpException) {
+        if ($exception instanceof HttpException) {
+            $code = $exception->getStatusCode();
+
+            $message;
+
+            switch($code) {
+                case 404:
+                    $message = 'Route not found.';
+                    break;
+                case 405:
+                    $message = 'Invalid HTTP method.';
+                    break;
+                default:
+                    $message = "Error Code $code";
+                    break;
+            }
+
             return response()->json([
-                'message' => 'Invalid HTTP method.'
-            ], 405);
+                'message' => $message
+            ], $code);
         }
+
         return parent::render($request, $exception);
     }
 }
