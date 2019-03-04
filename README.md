@@ -10,14 +10,14 @@ Backend Web Pokedex Project for Myriad Mobile internship.
 
 ### Documentation
 
-[Authentication](github.com/bradenrayhorn/pokedex-backend/wiki/authentication)
+[Authentication](https://github.com/bradenrayhorn/pokedex-backend/wiki/authentication)
 
-[Configuration](github.com/bradenrayhorn/pokedex-backend/wiki/configuration)
+[Configuration](https://github.com/bradenrayhorn/pokedex-backend/wiki/configuration)
 
 #### Routes
 
-[Pokemon Info](github.com/bradenrayhorn/pokedex-backend/wiki/pokemon)
+[Pokemon Info](https://github.com/bradenrayhorn/pokedex-backend/wiki/pokemon)
 
-[Pokemon Capture](github.com/bradenrayhorn/pokedex-backend/wiki/pokemon-capture)
+[Pokemon Capture](https://github.com/bradenrayhorn/pokedex-backend/wiki/pokemon-capture)
 
-[User Management](github.com/bradenrayhorn/pokedex-backend/wiki/user-management)
+[User Management](https://github.com/bradenrayhorn/pokedex-backend/wiki/user-management)
